@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        int len = nums.size();
+        sort(nums.begin(), nums.end());
+        int i = 0;
+        
+        
+        while(i < len){
+            int target = -nums[i];
+                
+            //finding the element by squeezing left and right
+            // figuring both elements at once. If the sum of left and right
+            // element is equal to target we've found triplet
+            int left = i + 1, right = len - 1;
+
+            while (left < right){
+
+                int sum = nums[left] + nums[right];
+
+                if (sum == target){
+                    vector<int>triplet;
+                    triplet.push_back(nums[i]);
+                    triplet.push_back(nums[left]);
+                    triplet.push_back(nums[right]);
+                    result.push_back(triplet);
+                    left = upper_bound(nums.begin() + i, nums.end(), nums[left]) - nums.begin();
+                }
+                else if (sum > target){
+                    right--;
+                }
+                else{
+                    left++;
+                }
+                
+            }
+            
+            i = upper_bound(nums.begin(), nums.end(), nums[i]) - nums.begin();
+                   
+        }
+    
+        return result;
+    }
+                   
+};
