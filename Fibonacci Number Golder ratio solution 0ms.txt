@@ -1,0 +1,10 @@
+class Solution {
+public:
+    int fib(int n) {
+        if ( n == 1) return 1;
+        float GR = 1.618034;
+
+        return round((pow(GR, n) - pow(GR -1, n)) / pow(5, 0.5));
+        
+    }
+};
