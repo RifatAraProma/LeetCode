@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int tribonacci(int n) {
+        vector<int>tribonacciVector;
+        tribonacciVector.push_back(0);
+        tribonacciVector.push_back(1);
+        tribonacciVector.push_back(1);
+        
+        if (n > 2)
+            calculateTribonacci(tribonacciVector, n);
+        
+        return tribonacciVector[n];
+    }
+    
+    int calculateTribonacci(vector<int> &v, int n)
+    {
+        if (n < v.size()) return v[n];
+        
+        int num1, num2, num3;
+        num1 = calculateTribonacci(v, n- 3);
+        num2 = calculateTribonacci(v, n- 2);
+        num3 = calculateTribonacci(v, n- 1);
+        
+        v.push_back(num1 + num2 + num3);
+        
+        return num1 + num2 + num3;
+    }
+};
