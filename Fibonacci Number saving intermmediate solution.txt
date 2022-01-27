@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int fib(int n) {        
+        int fibRes[41] = {0};
+        
+        fibRes[1] = 1;
+        
+        for (int i = 2; i <= n ; i++){
+            fibRes[i] = fibRes[i-1] + fibRes[i-2];
+        }
+        
+        return fibRes[n];
+        
+    }
+};

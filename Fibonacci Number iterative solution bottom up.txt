@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int fib(int n) {        
+        if (n < 2) return n;
+        
+        int sum = 0, add1 = 0, add2 = 1;
+        
+        for (int i = 1; i < n; i ++){
+            sum = add1 + add2;
+            add1 = add2;
+            add2 = sum;
+            
+        }
+        
+        return sum;
+    }
+};
