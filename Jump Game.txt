@@ -1,0 +1,16 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int len = nums.size();
+        vector<int>maxReachable(len + 5);
+        maxReachable[0] = nums[0];
+        
+        for (int i = 1; i < len; i++){
+            if (maxReachable[i -1] < i) return false;
+            
+            maxReachable[i] = max(maxReachable[i - 1], i + nums[i]);
+        }
+        
+        return true;
+    }
+};
