@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int len = nums.size();
+        vector<int>dp;
+        
+        for (int i = 0 ; i < len; i++){
+            dp.push_back(10005);
+        }
+        
+        dp[0] = 0;
+        
+        for (int i = 0; i < len; i++){
+            for(int j = i + 1; j <= i + nums[i]; j++){
+                
+                if(j >= len) break;
+                dp[j] = min(dp[j], dp[i] +1);        
+            }
+        }
+        
+        return dp[len -1];
+    }
+};
