@@ -1,0 +1,54 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        
+        int len = s.length();
+        string result;
+        int startI = 0, endI = 0;
+        
+        for (int i = 0 ; i < len; i++){
+            for (int j = i - 1, k = i + 1; j >= 0 && k < len; j--, k++ ){
+                if (s[j] != s[k]){
+                    break;
+                } 
+                
+                else {
+                    if (k - j  > endI - startI){
+                        startI = j;
+                        endI = k;
+                    }
+                }
+            }
+        }
+        
+        for (int i = 0 ; i < len; i++){
+
+            if ( i + 1 < len && s[i] == s[i + 1]){
+                
+                if (endI - startI < 2){
+                    startI = i;
+                    endI = i + 1;
+                }
+                
+                for (int j = i - 1, k = i + 2; j >= 0 && k < len; j--, k++ ){
+                    if (s[j] != s[k]){
+                        break;
+                    } 
+                    
+                    else if (k - j  > endI - startI){
+                        startI = j;
+                        endI= k;
+                    }
+                }
+            }          
+        }
+        
+        for (int i = startI; i <= endI; i++){
+            result.push_back(s[i]);
+        }
+        
+        return result;
+        
+    }
+    
+};
