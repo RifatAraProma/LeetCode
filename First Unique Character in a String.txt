@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    TreeNode* getTargetCopy(TreeNode* original, TreeNode* cloned, TreeNode* target) {
+        queue<TreeNode*>q;
+        q.push(cloned);
+        
+        while(!q.empty()){
+            TreeNode* now = q.front();
+            q.pop();
+            if (now->val == target->val) return now;
+            if (now->left != NULL){
+                q.push(now->left);
+            }
+            if (now->right != NULL){
+                q.push(now->right);
+            }
+            
+        }
+        
+        return NULL;
+    }
+};
