@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        int len = strs.size();
+        vector<vector<string>> res;
+        map<string, int> indexMap;
+
+        for (int i = 0; i < len; i++){
+            string temp = strs[i];
+            sort(temp.begin(), temp.end());
+
+            if (indexMap[temp]){
+                res[indexMap[temp] - 1].push_back(strs[i]);   
+            }
+            else{
+                vector<string> newStr;
+                newStr.push_back(strs[i]);
+                res.push_back(newStr);
+                indexMap[temp] = res.size();
+            }
+        }
+        
+        
+        return res;
+    }
+};
