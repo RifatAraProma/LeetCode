@@ -18,6 +18,8 @@ public:
         return output;
     }
     
+    // both upper and lower bound e answer low e thakbe. lower e low itself, upper e low - 1
+    
     int lowerBound(vector<int>&nums, int target){
         int low = 0;
         int high = nums.size() - 1;
@@ -30,7 +32,7 @@ public:
                 low = mid + 1;
             }
             else{
-                high = mid - 1;
+                high = mid - 1; // lower bound e high move kore target peleo
             }
         }
         
@@ -48,7 +50,7 @@ public:
                 high = mid - 1;
             }
             else{
-                low = mid + 1;
+                low = mid + 1; // upper bound e low move kore target peleo
             }
         }
         
