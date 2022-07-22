@@ -16,6 +16,8 @@ public:
                 // jonne nums[j] + nums[i] oboshhoi nums[k] er theke boro or equal hobe.
                 // mane nums[k - 1] already chhoto ager iteration er j tar jonne. to current
 		    // j er jonne to chhoto hobei. notun kore ota theke check kora lagbe na
+		    // ekhane j er upor depend kore k agay emon na. k ekbar nije nije scan kore j ekbar kore
+		    // so more like vitore 2n iteration hochhe one for j one for k. totally n^2
                 while (k < len && nums[k] < sum){
                     k++;
                 }
