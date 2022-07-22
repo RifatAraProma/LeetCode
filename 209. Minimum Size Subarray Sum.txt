@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        vector<int> sums;
+        int len = nums.size();
+        
+        sums.push_back(nums[0]);
+        
+        for (int i = 1; i < len; i++){
+            sums.push_back(sums[i - 1] + nums[i]);
+        }
+        
+        int ans = INT_MAX;
+        int numberToFind = target;
+        for (int i = 0; i < len; i++){
+            auto lb = lower_bound(sums.begin() + i, sums.end(), numberToFind);
+            int goalIndex = lb - sums.begin();
+            if (goalIndex < len)
+                ans = min(ans, goalIndex - i + 1);
+            
+            numberToFind = target + sums[i];
+        }
+        
+        if (ans == INT_MAX){
+            ans = 0;
+        }
+        
+        return ans;
+    }
+};
