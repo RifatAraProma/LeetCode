@@ -1,0 +1,66 @@
+class Solution {
+public:
+    string intToRoman(int num) {
+        map<int,string>charMap;
+        string output = "";
+        
+        charMap[1] = "I";
+        charMap[5] = "V";
+        charMap[10] = "X";
+        charMap[50] = "L";
+        charMap[100] = "C";
+        charMap[500] = "D";
+        charMap[1000] = "M";
+        charMap[4] = "IV";
+        charMap[9] = "IX";
+        charMap[40] = "XL";
+        charMap[90] = "XC";
+        charMap[400] = "CD";
+        charMap[900] = "CM";
+        
+        int init = 1000;
+        int odd = true;
+        while(num!= 0){
+            int exceptionNumber = exception(num);
+            if (exceptionNumber != -1){
+                output += charMap[exceptionNumber];
+                num -= exceptionNumber;
+                continue;
+            }
+            if (num >= init){
+                int div = num / init;
+                num = num % init;
+                while(div!= 0){
+                    output += charMap[init];
+                    div--;
+                }
+            }
+            if (odd){
+                init /= 2;
+                odd = false;
+            }
+            else{
+                init /= 5;
+                odd = true;
+            }
+        }
+        
+        return output;
+    }
+    
+    int exception (int num){
+        int freq = 0;
+        
+        while(num >= 10){
+            num /= 10;
+            freq++;
+        }
+        
+        if (num == 4 || num == 9){
+            return num * pow(10, freq);
+        }
+        
+        return -1;
+    }
+
+};
