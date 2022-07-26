@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows == 1) return s;
+        vector<char>matrix[numRows];
+        int len = s.length();
+        int row = -1;
+        bool odd = true;
+        string output;
+        
+        for (int i  = 0; i < len;i++){;
+            if (odd) row++;
+            else row--;
+            cout << odd << endl;
+            cout << row << endl;
+                                      
+            matrix[row].push_back(s[i]);
+            
+            if (row == numRows - 1) odd = false;
+            else if (row == 0) odd = true;
+        }
+        
+        for (int i = 0; i < numRows; i++){
+            int rowLen = matrix[i].size();
+            for (int j = 0; j < rowLen; j ++){
+                output.push_back(matrix[i][j]);
+            }
+        }
+        
+        return output;
+    }
+};
