@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int ans = 0;
+        map<char,bool>charSeenMap;
+        int len = s.length();
+        int left = 0, right = 0;
+        
+        while (right < len ){
+            if (charSeenMap[s[right]] == true){
+                while(s[left] != s[right]){
+                    charSeenMap[s[left]] = false;
+                    left++;
+                }
+                left++;
+            }
+            
+            charSeenMap[s[right]] = true;
+            ans = max(ans, right - left + 1);
+            right++;
+            
+        }
+        
+        return ans;
+        
+    }
+};
