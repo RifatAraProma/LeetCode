@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        map<int, string>numToStr;
+        vector<string> output;
+        int len = digits.length();
+        int digit = 2;
+        int c = 97;
+        
+        while(digit <= 9){
+            string s;
+            s.push_back(c++);
+            s.push_back(c++);
+            s.push_back(c++);
+            if (digit == 7 || digit == 9) s.push_back(c++);
+            numToStr[digit] = s;
+            digit++;
+        }
+        
+        for (int i = 0; i < len; i++){
+            int l = numToStr[digits[i] - 48].length();
+            if (i == 0){
+                for (int j = 0; j < l; j++){
+                    string s = "";
+                    s.push_back(numToStr[digits[i] - 48][j]);
+                    output.push_back(s);
+                }
+            }
+            else{
+                int vecLen = output.size();
+                for (int j = 0; j < vecLen; j++){
+                    string temp = output[j];
+                    for (int k = 0; k < l; k++){
+                        string s = "";
+                        s.push_back(numToStr[digits[i] - 48][k]);
+                        if (k == 0){
+                            output[j] += s;
+                        }
+                        else{
+                            output.push_back(temp + s);
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
+        return output;
+    }
+};
