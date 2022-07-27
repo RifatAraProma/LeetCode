@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int myAtoi(string s) {
+        int result = 0;
+        int len = s.length();
+        int i = 0;
+        int neg = false;
+        
+        while (s[i] == ' ') i++;
+
+        if (s[i] == '-' || s[i] == '+'){
+            neg = s[i] == '-' ? true : false;
+            i++;
+        }
+        
+        while(s[i] == '0') i++;
+        
+        while(s[i] >= 48 && s[i] <= 57){
+
+            if(result > INT_MAX / 10){
+                result = neg == true ? INT_MIN : INT_MAX;
+                return result;
+            }
+            
+            else if (result  < INT_MAX / 10){
+                result = result * 10 + (s[i] - 48);
+            }
+            else{
+                if(s[i] < 56){
+                    result = result * 10 + (s[i] - 48);
+                }
+                else if (neg && s[i] == 56){
+                    result = -1 * result * 10 - (s[i] - 48);
+                    return result;
+                }
+                else{
+                    result = neg == true ? INT_MIN : INT_MAX;
+                    return result;
+                }
+
+            }
+            i++;
+        }
+        
+        result = neg == true ? -1 * result : result;
+        return result;     
+        
+    }
+};
