@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string minRemoveToMakeValid(string s) {
+        stack<pair<char, int>>bracketStack;
+        int len = s.length();
+        string output = "";
+        
+        for (int i = 0 ; i < len; i++){
+            if (s[i] == '('){
+                bracketStack.push(make_pair('(', i));
+            }
+            else if(s[i] == ')'){
+
+                if (!bracketStack.empty()){
+                    if(bracketStack.top().first == '('){
+                        bracketStack.pop();
+                    } 
+                    else{
+                        bracketStack.push(make_pair(')', i));
+                    }
+                }
+                else{
+                        bracketStack.push(make_pair(')', i));
+                }
+            }
+        }
+        if (bracketStack.empty()) return s;
+        pair<char, int> indexToSkip = bracketStack.top();
+        
+        for (int i = len - 1; i >= 0; i--){
+            if(i == indexToSkip.second){
+                bracketStack.pop();
+                if (!bracketStack.empty()){
+                    indexToSkip = bracketStack.top();
+                }
+                continue;
+            }
+            output.push_back(s[i]);
+        }
+
+        reverse(output.begin(), output.end());
+        
+        return output;
+    }
+};
