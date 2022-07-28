@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        int len = s.length();
+
+        int charFreq[128] = {0};
+        for (int i = 0; i < len; i++){
+           charFreq[s[i]]++;
+        }
+        
+        for (int i = 0; i < len; i++){
+            if(charFreq[s[i]] == 1) return i;
+        }
+        
+        return -1;
+    }
+};
