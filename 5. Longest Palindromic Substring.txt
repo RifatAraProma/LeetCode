@@ -11,7 +11,7 @@ public:
             int len2 = expandAroundCenter(s, i , i + 1); // for cases like abba
             int ans = max(len1, len2);
             if (ans > end - start ){
-                start = i - (ans - 1) / 2;
+                start = i - (ans - 1) / 2; // for even length subtracting ans / 2 will result negative
                 end = i + (ans / 2);
             }
         }
