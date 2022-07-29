@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool validPalindrome(string s) {
+        int len = s.length();
+        if (isPalindrome(s)) return true;
+        
+        for (int i = 0, j = len - 1; i < len / 2; i++, j--){
+            if(s[i] != s[j]){
+                string temp = s;
+                if(isPalindrome(s.erase(i, 1))) return true;
+                else if (isPalindrome(temp.erase(j, 1))) return true;
+                else break;
+            }
+        }
+        
+        return false;
+        
+    }
+    
+    bool isPalindrome(string s){
+        int len = s.length();
+        
+        for (int i = 0, j = len - 1; i < len / 2; i++, j--){
+            if(s[i] != s[j]) return false;
+        }
+        
+        return true;
+    }
+};

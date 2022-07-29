@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool validPalindrome(string s) {
+        int len = s.length();
+        if (isPalindrome(s)) return true;
+        
+        for (int i = 0, j = len - 1; i < len / 2; i++, j--){
+            if(s[i] != s[j]){
+                if(isPalindrome(s, i)) return true;
+                else if (isPalindrome(s, j)) return true;
+                else break;
+            }
+        }
+        
+        return false;
+        
+    }
+    
+    bool isPalindrome(string s, int skipIndex = -1){
+        int len = s.length();
+        int i = 0, j = len - 1;
+        while ( i <= len / 2){
+            if(i == skipIndex){
+                i++;
+                continue;
+            }
+            else if(j == skipIndex){
+                j--;
+                continue;
+            }
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+               
+        return true;
+    }
+};
