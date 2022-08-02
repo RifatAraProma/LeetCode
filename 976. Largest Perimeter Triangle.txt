@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int largestPerimeter(vector<int>& nums) {
+        int len = nums.size();
+        sort(nums.begin(), nums.end());
+        
+        int maxSideIndex = len - 1;
+        int midSideIndex = maxSideIndex - 1;
+        int minSideIndex = maxSideIndex - 2;
+        
+        while(minSideIndex >= 0){
+            int perimeter = calcPerimeter(nums[maxSideIndex], nums[midSideIndex], nums[minSideIndex]);
+            
+            if(perimeter) return perimeter;
+            
+            minSideIndex--;
+            
+            if (minSideIndex == 0 && midSideIndex != 1){
+                midSideIndex--;
+                minSideIndex = midSideIndex - 1;
+            }
+            else{
+                maxSideIndex--;
+                midSideIndex = maxSideIndex - 1;
+                minSideIndex = maxSideIndex - 2;
+            }
+        }
+        
+        return 0;
+        
+    }
+    
+    int calcPerimeter(int a , int b, int c){
+        if (b + c > a) return a+b+c;
+        
+        return 0;
+    }
+};
