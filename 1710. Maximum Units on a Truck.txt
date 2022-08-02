@@ -1,0 +1,27 @@
+class Solution {
+public:
+    
+    bool compareVectors(vector<int> first, vector<int>second){
+        return first[1] > second[1];
+    }
+    
+    int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
+        int result = 0;
+        int len = boxTypes.size();
+        
+        sort(boxTypes.begin(), boxTypes.end(),[](vector<int>& lhs, vector<int>& rhs){
+            return lhs[1] > rhs[1];
+        });
+        
+        int i = 0;
+        
+        while(truckSize != 0 && i < len ){   
+            int boxAmount = min(truckSize, boxTypes[i][0]);
+            result += boxAmount * boxTypes[i][1];
+            truckSize -= boxAmount;
+            i++;
+        }
+        
+        return result;
+    }
+};
