@@ -1,0 +1,30 @@
+class Solution {
+public:
+    
+    struct Comparator{
+        bool operator()(const vector<int> &lhs, const vector<int>&rhs){
+            return lhs[1] < rhs[1];
+        }   
+    };
+    
+    int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
+        int result = 0;
+        int len = boxTypes.size();
+        priority_queue<vector<int>, vector<vector<int>>, Comparator> queue;
+        
+        for (int i = 0; i < len; i++){
+            queue.push(boxTypes[i]);
+        }
+        
+        
+        
+        while(truckSize != 0 && !queue.empty() ){   
+            int boxAmount = min(truckSize, queue.top()[0]);
+            result += boxAmount * queue.top()[1];
+            truckSize -= boxAmount;
+            queue.pop();
+        }
+        
+        return result;
+    }
+};
