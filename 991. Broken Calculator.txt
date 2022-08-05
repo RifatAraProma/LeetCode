@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int brokenCalc(int startValue, int target) {
+        int move = 0;
+        
+        while(target != startValue){
+            if (target > startValue){
+                if (target % 2 != 0){
+                    move++;
+                    target++;
+                }
+                
+                target = target / 2;
+                move++;
+            }
+            else{
+                move += startValue - target;
+                break;
+            }
+        }
+        
+        return move;
+        
+    }
+};
