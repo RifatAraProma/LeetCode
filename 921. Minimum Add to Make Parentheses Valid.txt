@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        stack<char> parenStack;
+        int len = s.length();
+        int move = 0;
+        for (int i = 0; i < len; i++){
+            if (!parenStack.empty()){
+                if(parenStack.top() == '(' && s[i] == ')'){
+                    parenStack.pop();
+                    continue;
+                }
+            }
+            parenStack.push(s[i]);
+        }
+        
+        while (!parenStack.empty()){
+            move++;
+            parenStack.pop();
+        }
+        
+        return move;
+    }
+};
