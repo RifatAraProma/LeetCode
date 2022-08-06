@@ -1,0 +1,24 @@
+class Solution {
+public:
+    
+    int twoCitySchedCost(vector<vector<int>>& costs) {
+        int len = costs.size();
+        int cost = 0;
+
+        sort(costs.begin(), costs.end(), [](const vector<int> &lhs, const vector<int> & rhs){ 
+            return (lhs[0] - lhs[1]) < (rhs[0] - rhs[1]); 
+        });
+
+        for (int i = 0; i < len; i++){
+            if (i < len / 2){
+                cost += costs[i][0];
+            }
+            else{
+                cost += costs[i][1];
+            }
+
+        }
+        
+        return cost;
+    }
+};

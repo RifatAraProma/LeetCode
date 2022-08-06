@@ -30,7 +30,6 @@ public:
         
         while (!pqB.empty()){
             cost += costs[pqB.top().second][1];
-            cout << pqB.top().second << endl;
             pqB.pop();
         }
         
