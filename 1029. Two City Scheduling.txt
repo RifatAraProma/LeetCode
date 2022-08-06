@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int twoCitySchedCost(vector<vector<int>>& costs) {
+        priority_queue<pair<int,int>> pqA;
+        priority_queue<pair<int, int>> pqB;
+        int len = costs.size();
+        int cost = 0;
+        for (int i  = 0; i < len; i++){
+           
+            if (costs[i][0] < costs[i][1]){
+                pqA.push(make_pair(-1 * (costs[i][1] - costs[i][0]), i));
+                if(pqA.size() > len / 2){
+                    pqB.push(make_pair(-pqA.top().first, pqA.top().second));
+                    pqA.pop();
+                }
+            }
+            else {  
+                pqB.push(make_pair((costs[i][0] - costs[i][1]) * -1, i));
+                if(pqB.size() > len / 2){
+                    pqA.push(make_pair(-pqB.top().first, pqB.top().second));
+                    pqB.pop();
+                }
+            }
+        }
+        
+        while (!pqA.empty()){
+            cost += costs[pqA.top().second][0];
+            pqA.pop();
+        }
+        
+        while (!pqB.empty()){
+            cost += costs[pqB.top().second][1];
+            cout << pqB.top().second << endl;
+            pqB.pop();
+        }
+        
+        return cost;
+    }
+};
