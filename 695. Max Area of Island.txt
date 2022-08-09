@@ -1,0 +1,50 @@
+class Solution {
+public:
+    bool visited[51][51] = {false};
+    
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        int area = 0;
+        
+        for (int i = 0; i < row; i++){
+            for (int j = 0; j < col; j++){
+                if(!visited[i][j] && grid[i][j]){                   
+                    area = max (area, calcAreaWithBFS(grid, i, j));
+                }
+            }
+        }
+        
+        return area;
+    }
+    
+    int calcAreaWithBFS(vector<vector<int>>&grid, int x, int y){
+        queue<pair<int, int>>bfsQ;
+        visited[x][y] = true;
+        int areaCount = 0;
+        bfsQ.push({x, y});
+        int dirX[] = {-1, 1, 0, 0};
+        int dirY[] = {0, 0, -1, 1};
+        int row = grid.size();
+        int col = grid[0].size();
+
+        while (!bfsQ.empty()){
+            pair<int, int> curr = bfsQ.front();
+            bfsQ.pop();
+            areaCount++;
+            for (int d = 0; d < 4; d++){
+                int r = curr.first + dirX[d], c = curr.second + dirY[d];
+                if (isValid(r, c, row, col) && !visited[r][c] && grid[r][c]){
+                    bfsQ.push({r, c});
+                    visited[r][c] = true;
+                }
+            }
+        }
+        
+        return areaCount;
+    }
+    
+    bool isValid(int x, int y, int row, int col){
+        return x >= 0 && x < row && y >= 0 && y < col;
+    }
+};
