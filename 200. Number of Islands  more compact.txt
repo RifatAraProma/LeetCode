@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        bool visited[301][301] = {false};
+        int island = 0;
+        int row = grid.size();
+        int col = grid[0].size();
+        int dirX[] = {-1, 1, 0, 0};
+        int dirY[] = {0, 0, -1, 1};
+        
+        for (int i = 0; i < row; i++){
+            for (int j = 0; j < col; j++){
+                if (grid[i][j] == '1' && !visited[i][j]){
+                    island++;
+                    queue<pair<int, int>> bfsQ;
+                    bfsQ.push({i,j});
+                    visited[i][j] = true;
+                    while (!bfsQ.empty()){
+                        pair<int, int>curr = bfsQ.front();
+                        bfsQ.pop();
+                    
+                        for (int d = 0; d < 4; d ++){
+                            int r = curr.first + dirX[d], c = curr.second + dirY[d];
+                            if (isValid(r, c, row, col) && !visited[r][c] && grid[r][c] == '1'){
+                                bfsQ.push({r, c});
+                                visited[r][c] = true;
+                            }
+                        }
+                       
+                    }
+                }
+            }
+        }
+        
+        return island;        
+    }
+    
+    bool isValid(int x, int y, int row, int col){
+        return x >= 0 && x < row && y >= 0 && y < col;
+    }
+};
