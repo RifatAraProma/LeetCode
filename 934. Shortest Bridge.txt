@@ -1,0 +1,93 @@
+class Solution {
+public:
+    int shortestBridge(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        
+        queue<pair<int,int>> bfsQ;
+        
+        vector<vector<int>>level;
+        vector<vector<bool>>visited;
+        
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        
+        for (int i = 0; i < 101; i++){
+            vector<int>tempLevel(101);
+            vector<bool>tempVisited(101);
+            
+            level.push_back(tempLevel);
+            visited.push_back(tempVisited);
+        }
+        
+        for(int i = 0; i < row; i++){
+            for (int j = 0; j < col; j++){
+                if (grid[i][j]){
+                    preProcess(grid, i, j, bfsQ);
+                    break;
+                }
+            }
+            if(!bfsQ.empty()) break;
+        }
+        
+
+        while(!bfsQ.empty()){
+            pair<int, int> curr = bfsQ.front();
+            bfsQ.pop();
+            
+            for(int i = 0; i < 4; i++){
+                int x = curr.first + dirX[i];
+                int y = curr.second + dirY[i];
+                
+                if(isValid(x, y, row, col) && grid[x][y] == 1) return level[curr.first][curr.second];
+                
+                if(isValid(x, y, row, col) && !visited[x][y] && grid[x][y] == 0){
+                    visited[x][y] = true;
+                    level[x][y] = level[curr.first][curr.second] + 1;
+                    bfsQ.push({x,y});
+                }
+            }            
+        }
+        
+        return -1;
+
+    }
+    
+    void preProcess(vector<vector<int>> &grid, int r, int c, queue<pair<int,int>> &sources){
+        queue<pair<int, int>>bfsQ;
+        vector<vector<bool>>visited;
+        
+        for (int i = 0; i < 101; i++){
+            vector<bool>temp(101);
+            visited.push_back(temp);
+        }
+        
+        bfsQ.push({r, c});
+        visited[r][c] = true;
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        int row = grid.size();
+        int col = grid[0].size();
+        grid[r][c] = 2;
+        
+        while(!bfsQ.empty()){
+            pair curr = bfsQ.front();
+            bfsQ.pop();
+            sources.push(curr);
+            for(int i = 0; i < 4; i++){
+                int x = curr.first + dirX[i];
+                int y = curr.second + dirY[i];
+                
+                if (isValid(x, y, row, col) && !visited[x][y] && grid[x][y]){
+                    grid[x][y] = 2;
+                    visited[x][y] = true;
+                    bfsQ.push({x, y});
+                }
+            }
+        }
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};
