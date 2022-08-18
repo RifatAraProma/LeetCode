@@ -1,0 +1,55 @@
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        map<string, vector<string>> graph;
+        vector<string> emailList;
+        map<string, bool> visited;
+        map<string, string> nameEmailMap;
+        vector<vector<string>> output;
+    
+        for (auto acc: accounts){
+            string name = acc[0];
+            int len = acc.size();
+            string email = acc[1];
+            nameEmailMap[email] = name;
+            
+            if(visited.find(email) == visited.end()){
+                visited[email] = true;
+                emailList.push_back(email);
+            }
+            
+            for (int i = 2; i < len; i++){
+                string child = acc[i];
+                graph[email].push_back(child);
+                graph[child].push_back(email);
+            }        
+        }
+        
+        visited.clear();
+        
+        for (auto email : emailList){
+            if(visited.find(email) != visited.end()) continue;
+                
+            vector<string>acc;
+            acc.push_back(nameEmailMap[email]);
+            dfs(graph, visited, acc, email);
+            sort(acc.begin() + 1, acc.end());
+            output.push_back(acc);
+        }
+        
+        return output;
+    }
+    
+    void dfs(map<string, vector<string>> &graph, map<string, bool> & visited, vector<string> &acc, string email){
+        if(visited.find(email) != visited.end()) return;
+        
+        visited[email] = true;
+        acc.push_back(email);
+        
+        for (auto neighbor : graph[email]){
+            dfs(graph, visited, acc, neighbor);
+        }
+        
+        return;
+    }
+};
