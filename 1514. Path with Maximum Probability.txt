@@ -1,0 +1,52 @@
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
+        vector<vector<int>>graph(n + 1);
+        map<pair<int,int>, double> probMap;
+        vector<double>maxProb;
+        int len = edges.size();
+        
+        for(int i = 0; i < len; i++){
+            vector<int> edge = edges[i];
+            
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+            probMap[{edge[0], edge[1]}] = succProb[i];
+            probMap[{edge[1], edge[0]}] = succProb[i];
+        }
+        
+        for(int i = 0;  i < n; i++){
+            maxProb.push_back(-1);
+        }
+        
+        probDijkstra(graph, probMap, start, maxProb);
+        
+        if (maxProb[end] > -1) return maxProb[end];
+        else return 0;
+    }
+    
+    void probDijkstra(vector<vector<int>> &graph, map<pair<int, int>, double> &probMap, int start,  vector<double> &maxProb){
+        priority_queue<pair<double, int>> dijQ;
+        
+        dijQ.push({1,start});
+        maxProb[start] = 1;
+        
+        while(!dijQ.empty()){
+            auto curr = dijQ.top();
+            dijQ.pop();
+            int parent = curr.second;
+            int prob = curr.first;
+            int len = graph[parent].size();
+            
+            for(int i = 0; i < len; i++){
+                int child = graph[parent][i];
+                if (maxProb[child] < maxProb[parent] * probMap[{parent, child}]){
+                    maxProb[child] = maxProb[parent] * probMap[{parent, child}];
+                    dijQ.push({maxProb[child], child});
+                }
+            }   
+        }
+        
+        return;
+    }
+};
