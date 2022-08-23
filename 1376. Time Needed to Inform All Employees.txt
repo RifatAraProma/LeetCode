@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int numOfMinutes(int n, int headID, vector<int>& manager, vector<int>& informTime) {
+        vector<vector<int>>graph(n+1);
+        int len = manager.size();
+        
+        for(int i  = 0; i < len; i++){
+            int mngr = manager[i];
+            if(mngr == -1) continue;
+            graph[mngr].push_back(i);
+        }
+        
+        int time = bfsCalcTime(graph, headID, informTime, manager);
+        
+        return time;
+    }
+    
+    int bfsCalcTime(vector<vector<int>>&graph, int root, vector<int>&informTime, vector<int>&managers){
+        queue<int>bfsQ;
+        int totalTime = 0;
+        bfsQ.push(root);
+        int prevMaxTime = 0;
+        
+        while(!bfsQ.empty()){
+            int len = bfsQ.size();
+            int maxTime = 0;
+            
+            for(int i = 0; i < len; i++){
+                auto curr = bfsQ.front();
+                bfsQ.pop();
+                if(managers[curr] >= 0 && prevMaxTime > informTime[managers[curr]])
+                    informTime[curr] = informTime[curr] - (prevMaxTime - informTime[managers[curr]]);
+                
+                maxTime = max(maxTime, informTime[curr]);
+                
+                for(auto sub : graph[curr]){
+                    bfsQ.push(sub);
+                }
+
+            }
+            
+            totalTime += maxTime;
+            prevMaxTime = maxTime;
+        }
+        
+        return totalTime;
+    }
+};
