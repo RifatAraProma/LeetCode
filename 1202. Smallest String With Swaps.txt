@@ -1,0 +1,48 @@
+class Solution {
+public:
+    string smallestStringWithSwaps(string s, vector<vector<int>>& pairs) {
+        vector<vector<int>>graph(100001);
+        vector<bool>visited(100001);
+        int len = s.length();
+        string smallestString;
+        initializeString(smallestString, len);
+        
+        for(auto edge : pairs){
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+        
+        for(int i = 0; i < len; i++){
+            if(!visited[i]){
+                vector<int>indices;
+                vector<char>characters;
+                dfs(indices, characters, graph, visited, s, i);
+                sort(indices.begin(), indices.end());
+                sort(characters.begin(), characters.end());
+                
+                int indexLen = indices.size();
+                for(int j = 0; j < indexLen; j++)
+                    smallestString[indices[j]] = characters[j];
+            }
+        }
+        
+        return smallestString;
+    }
+    
+    void dfs(vector<int>&indices, vector<char>&characters, vector<vector<int>>&graph, vector<bool>&visited, string &s, int node){        
+        visited[node] = true;
+        indices.push_back(node);
+        characters.push_back(s[node]);
+        
+        for(auto child : graph[node]){
+            if(!visited[child])
+                dfs(indices, characters, graph, visited, s, child);    
+        }
+    }
+    
+    void initializeString(string &smallestString, int len){
+        for(int i = 0; i < len; i++){
+            smallestString.push_back(' ');
+        }
+    }
+};
