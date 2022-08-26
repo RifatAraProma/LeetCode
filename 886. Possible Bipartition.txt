@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        vector<vector<int>>graph(n+1);
+        vector<bool>visited(n+1);
+        vector<int>colorMap(n+1);
+        
+        for(auto edge : dislikes){
+            graph[edge[0]].push_back(edge[1]);
+            graph[edge[1]].push_back(edge[0]);
+        }
+        
+        for(int i = 1; i < n; i++){
+            if(!visited[i]){
+                bool biColorable = biColorDFS(graph, visited, colorMap, i, 1);
+                if(!biColorable) return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    bool biColorDFS(vector<vector<int>> &graph, vector<bool> & visited, vector<int> &colorMap, int src, int color){        
+        visited[src] = true;
+        colorMap[src] = color;
+        bool biColorable = true;
+        int childColor = color == 1 ? 2 : 1;
+        
+        for(auto child : graph[src]){
+            if(!visited[child])
+                biColorable = biColorable && biColorDFS(graph, visited, colorMap, child, childColor);
+            else{
+                biColorable &= colorMap[child] == childColor;
+            }
+        }
+        
+        return biColorable;
+    }
+};
