@@ -1,0 +1,74 @@
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        vector<vector<bool>>visited;
+        int row = board.size();
+        int col = board[0].size();
+        
+        for(int i = 0 ; i < 201; i++){
+            vector<bool>temp(201);
+            visited.push_back(temp);    
+        }
+        
+        markNonFlippedBFS(board, visited);
+        
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                if(!visited[i][j]){
+                    board[i][j] = 'X';
+                }
+            }
+        }
+        
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+    
+    void markNonFlippedBFS(vector<vector<char>>&board, vector<vector<bool>>&visited){
+        int row = board.size();
+        int col = board[0].size();
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        queue<pair<int, int>>bfsQ;
+        
+        for (int i = 0 ; i < row; i++){
+            if(board[i][0] == 'O'){
+                bfsQ.push({i,0});
+                visited[i][0] = true;
+            } 
+            if(board[i][col-1] == 'O'){
+                bfsQ.push({i,col-1});
+                visited[i][col-1] = true;
+            }
+        }
+        
+        for (int i = 0 ; i < col; i++){
+            if(board[0][i] == 'O'){
+                bfsQ.push({0,i});
+                visited[0][i] = true;
+            }
+            if(board[row-1][i] == 'O'){
+                bfsQ.push({row-1,i});
+                visited[row-1][i] = true;
+            }
+        }
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            
+            for(int i = 0; i < 4; i++){
+                int x = curr.first + dirX[i];
+                int y = curr.second + dirY[i];
+                if(isValid(x, y, row, col) && !visited[x][y] && board[x][y] == 'O'){
+                    visited[x][y] = true;
+                    bfsQ.push({x,y});
+                }
+            }
+        }
+    }
+    
+    
+};
