@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        return dijkstra(heights);
+    }
+    
+    int dijkstra(vector<vector<int>>& heights){
+        priority_queue<pair<int, pair<int, int>>>dijQ;
+        
+        vector<vector<int>>cost;
+        int row = heights.size();
+        int col = heights[0].size();
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        
+        for(int i = 0; i < row; i++){
+            vector<int>temp;
+            
+            for(int j = 0; j < col; j++)
+                temp.push_back(1000001);
+            
+            cost.push_back(temp);
+        }
+        
+        dijQ.push({0, {0,0} });
+        cost[0][0] = 0;
+        
+        while(!dijQ.empty()){
+            auto curr = dijQ.top();
+            dijQ.pop();
+            int parentR = curr.second.first;
+            int parentC = curr.second.second;
+            
+            for(int i = 0; i < 4; i++){
+                int x = parentR + dirX[i];
+                int y = parentC + dirY[i];
+                
+                if(!isValid(x, y, row, col)) continue;
+                
+                int childCost = max(cost[parentR][parentC], abs(heights[parentR][parentC] - heights[x][y]));
+                if(childCost < cost[x][y]){
+                    cost[x][y] = childCost;
+                    dijQ.push({-childCost, {x, y}});
+                }                
+                   
+            }
+        }
+        
+        return cost[row-1][col-1];
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};
