@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int minJumps(vector<int>& arr) {
+        map<int, vector<int> > valueIndexMap;
+        int len = arr.size();
+        
+        for(int i = 0; i < len; i++){
+            valueIndexMap[arr[i]].push_back(i);
+        }
+        
+        return bfs(arr, valueIndexMap);
+    }
+    
+    int bfs(vector<int>&arr, map<int, vector<int>>&valueIndexMap){
+        queue<int>bfsQ;
+        int len = arr.size();
+        vector<int>level(len);
+        vector<bool>visited(len);
+        
+        bfsQ.push(0);
+        level[0] = 0;
+        visited[0] = true;
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            vector<int>children;
+            
+            children.push_back(curr + 1);
+            children.push_back(curr - 1);
+            
+            for(auto index : valueIndexMap[arr[curr]]){
+                if(index == curr) continue;
+                
+                children.push_back(index);
+            }
+            
+            valueIndexMap[arr[curr]].clear();
+            
+            for(auto child : children){
+                if(child < len && child >= 0 && !visited[child]){
+                    visited[child] = true;
+                    bfsQ.push(child);
+                    level[child] = level[curr] + 1;
+                }
+            }
+            
+        }
+        
+        return level[len - 1];
+    }
+};
