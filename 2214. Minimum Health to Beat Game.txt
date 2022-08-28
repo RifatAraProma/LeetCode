@@ -1,0 +1,16 @@
+class Solution {
+public:
+    long long minimumHealth(vector<int>& damage, int armor) {
+        long long int minHealth = 1;
+        int maxDamage = -1;
+        
+        for(auto dam : damage){
+            maxDamage = max(maxDamage, dam);
+            minHealth += dam;
+        }
+        
+        minHealth -= min(maxDamage, armor);
+        
+        return minHealth;
+    }
+};
