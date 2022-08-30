@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> numSmallerByFrequency(vector<string>& queries, vector<string>& words) {
+        vector<int>queriesFreq;
+        vector<int>wordsFreq;
+        vector<int>ans;
+        
+        for(auto query : queries ){
+            queriesFreq.push_back(freqOfSmallestChar(query));
+        }
+        
+        for(auto word : words){
+            wordsFreq.push_back(freqOfSmallestChar(word));
+        }
+        
+        for(auto qFreq : queriesFreq){
+            int counter = 0;
+            for(auto wFreq : wordsFreq){
+                if(qFreq < wFreq) counter++;
+            }
+            ans.push_back(counter);
+        }
+        
+        return ans;
+    }
+    
+    int freqOfSmallestChar(string &s){
+        sort(s.begin(), s.end());
+        int ans = 1;
+        int len = s.length();
+        
+        for(int i = 1; i < len; i++){
+            if(s[0] == s[i]) ans++;
+        }
+        
+        return ans;
+    }
+};
