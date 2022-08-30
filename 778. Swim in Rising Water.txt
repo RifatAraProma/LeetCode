@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int swimInWater(vector<vector<int>>& grid) {
+        return binSearch(0, 2500, grid);
+    }
+    
+    int binSearch(int low, int high, vector< vector<int> >&grid){
+        int ans = 0;
+        
+        while(low <= high){
+            int mid = (low + high) / 2;
+            vector<vector<bool> >visited;
+            clearVisited(visited);
+            
+            if(dfs(grid, visited, 0, 0, mid)){
+                ans = mid;
+                high = mid - 1;
+            }
+            else{
+                low = mid + 1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    void clearVisited(vector<vector<bool> >&visited){
+        for(int i = 0; i < 51; i++){
+            vector<bool>temp(51);
+            visited.push_back(temp);
+        }
+    }
+    
+    bool dfs(vector <vector<int> > &grid, vector< vector<bool> >&visited, int r, int c, int t){
+        int row = grid.size();
+        int col = grid[0].size();
+        
+        if(r == row - 1 && c == col - 1 && grid[r][c] <= t) return true;
+        if(grid[r][c] > t) return false;
+        
+        visited[r][c] = true;
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        bool ans = false;
+        
+        for(int i = 0; i < 4; i++){
+            int x = r + dirX[i];
+            int y = c + dirY[i];
+            if(isValid(x, y, row, col) && !visited[x][y] && grid[x][y] <= t){
+                ans |= dfs(grid, visited, x, y, t);
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col; 
+    }
+};
