@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int getFood(vector<vector<char>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        int r = -1;
+        int c = -1;
+        
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                if(grid[i][j] == '*'){
+                    r = i;
+                    c = j;
+                    break;
+                }
+            }
+            if(r != -1) break;
+        }
+        
+        return shortestPath(grid, r, c);
+    }
+    
+    int shortestPath(vector< vector<char> >&grid, int r, int c){
+        queue<pair <int, int> >bfsQ;
+        map<pair<int, int>, int >level;
+        vector<vector<bool> >visited;
+        int row = grid.size();
+        int col = grid[0].size();
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        
+        for(int i  = 0; i < row; i++){
+            vector<bool>temp(col);
+            visited.push_back(temp);
+        }
+        
+        bfsQ.push({r,c});
+        visited[r][c] = true;
+        level[{r,c}] = 0;
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            for(int i  = 0; i < 4; i++){
+                int x = curr.first + dirX[i];
+                int y = curr.second + dirY[i];
+                if(isValid(x, y, row, col) && grid[x][y] != 'X' && !visited[x][y]){
+                    bfsQ.push({x,y});
+                    visited[x][y] = true;
+                    level[{x,y}] = level[{curr.first, curr.second}] + 1;
+                    if(grid[x][y] == '#') return level[{x,y}];
+                }
+            }
+            
+        }
+        
+        return -1;
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r < row && r >= 0 && c < col && c >=0; 
+    }
+};
