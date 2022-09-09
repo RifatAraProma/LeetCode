@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<string> reorderLogFiles(vector<string>& logs) {
+        vector<string>digitLogs;
+        vector<pair<string, string>>letterLogs;
+        int len = logs.size();
+        vector<string> result;
+        
+        for(auto log : logs){
+            int i = startIndexOfLog(log);
+            if(log[i] <= '9')
+                digitLogs.push_back(log);
+            else
+            {
+                letterLogs.push_back({log.substr(i, log.length()), log.substr(0, i-1)});
+            }
+        }
+
+        sort(letterLogs.begin(), letterLogs.end(), [](auto &lhs, auto & rhs){
+            if(lhs.first == rhs.first) return lhs.second < rhs.second;
+            
+            return lhs.first < rhs.first;
+        });
+        
+        for(auto s : letterLogs){
+            result.push_back(s.second + " " + s.first);
+        }
+        
+        
+        for(auto s : digitLogs){
+            result.push_back(s);
+        }
+        
+        return result;
+    }
+    
+    int startIndexOfLog(string &s){
+        int len = s.length();
+        
+        for(int i = 0; i < len; i++){
+            if(s[i] == ' ') return i + 1;
+        }
+        
+        return 0;
+    }
+};
