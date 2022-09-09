@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        return minTimeBFS(grid);
+    }
+    
+    int minTimeBFS(vector<vector<int> >&grid){
+        int row = grid.size();
+        int col = grid[0].size();
+        int dirX[] = {-1, 1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        
+        queue<pair<int, int> >bfsQ;
+        vector<vector<int> >level;
+        
+        for(int i = 0; i < 10; i++){
+            vector<int>temp(10);
+            level.push_back(temp);
+        }
+        
+        for(int i = 0; i < row; i++){
+            for(int j  = 0; j < col; j++){
+                if(grid[i][j] == 2){
+                    bfsQ.push({i,j});
+                }   
+            }
+        }
+        int minTime = 0;
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            int px = curr.first;
+            int py = curr.second;
+            for(int i = 0; i < 4; i++){
+                int x = px + dirX[i];
+                int y = py + dirY[i];
+                
+                if(isValid(x, y, row, col) && grid[x][y] == 1){
+                    bfsQ.push({x,y});
+                    grid[x][y] = 2;
+                    level[x][y] = level[px][py] + 1;
+                    minTime = max(minTime, level[x][y]);
+                }
+            }    
+        }
+        
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                if(grid[i][j] == 1) return -1;
+            }
+        }
+        
+        return minTime;
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};
