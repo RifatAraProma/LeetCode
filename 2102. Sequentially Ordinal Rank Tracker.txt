@@ -1,0 +1,84 @@
+class SORTracker {
+public:
+    struct Location{
+        string name;
+        int score;
+        
+        Location(string n, int s){
+            name = n;
+            score = s;
+        }
+    };
+    
+    struct minHeapComparator{
+        bool operator() (Location const &lhs, Location const &rhs){
+            if(lhs.score == rhs.score)
+                return lhs.name < rhs.name;
+            else
+                return lhs.score > rhs.score;
+        }
+    };
+    
+    struct maxHeapComparator{
+        bool operator() (Location &lhs, Location &rhs){
+            if(lhs.score == rhs.score)
+                return lhs.name > rhs.name;
+            else
+                return lhs.score < rhs.score;
+        }
+    };
+    
+    priority_queue<Location, vector<Location>, minHeapComparator> orderedBestPlaces;
+    priority_queue<Location, vector<Location>, maxHeapComparator> reverseBestPlaces;
+    int i;
+    
+    SORTracker() {
+        i = 1;
+    }
+    
+    void add(string name, int score) {
+        Location newLoc = Location(name, score);
+        if(orderedBestPlaces.size() == 0){
+            orderedBestPlaces.push(newLoc);
+        }
+        else{
+            if(score >= orderedBestPlaces.top().score){
+                orderedBestPlaces.push(newLoc);
+        
+                if(orderedBestPlaces.size() >= i){
+                    reverseBestPlaces.push(orderedBestPlaces.top());
+                    orderedBestPlaces.pop();
+                }
+            }
+            else{
+                reverseBestPlaces.push(newLoc);
+                
+                if( i > orderedBestPlaces.size()){
+                    orderedBestPlaces.push(reverseBestPlaces.top());
+                    reverseBestPlaces.pop();
+                }
+            }
+        }
+    }
+    
+    string get() {
+        if(i > orderedBestPlaces.size()){
+            orderedBestPlaces.push(reverseBestPlaces.top());
+            reverseBestPlaces.pop();
+        }
+        if( i < orderedBestPlaces.size()){
+            reverseBestPlaces.push(orderedBestPlaces.top());
+            orderedBestPlaces.pop();
+        }
+        
+        i++;
+        return orderedBestPlaces.top().name;
+    }
+};
+
+/**
+ * Your SORTracker object will be instantiated and called as such:
+ * SORTracker* obj = new SORTracker();
+ * obj->add(name,score);
+ * string param_2 = obj->get();
+ */
