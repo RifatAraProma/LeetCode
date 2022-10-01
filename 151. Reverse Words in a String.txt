@@ -1,0 +1,30 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        stack<string> wordSt;
+        int len = s.length();
+        string temp = "";
+        string ans = "";
+        for(int i = 0; i < len; i++){
+            if(s[i] == ' '){
+                if(temp != ""){
+                    wordSt.push(temp);
+                    temp = "";
+                }
+                continue;
+            }
+            temp.push_back(s[i]);          
+        }
+        
+        if(temp != "") wordSt.push(temp);
+        
+        while(!wordSt.empty()){
+            ans += wordSt.top() + " ";
+            wordSt.pop();
+        }
+        
+        ans.pop_back();
+        
+        return ans;
+    }
+};
