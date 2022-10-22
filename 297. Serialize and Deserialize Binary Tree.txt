@@ -1,0 +1,118 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        string res = "";
+        queue<TreeNode*>bfsQ;
+        bfsQ.push(root);
+
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            if(curr == NULL){
+                res += "null,";
+                continue;
+            }
+            res += toString(curr->val) + ",";
+            bfsQ.push(curr->left);
+            bfsQ.push(curr->right);
+        }
+        
+        res.pop_back();
+        
+        return res;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        vector<string>parsed;
+        parseString(data, parsed);
+        queue<TreeNode*>bfsQ;
+        
+        if(parsed.size() == 0 || parsed[0] == "null") return NULL;
+        
+        int len = parsed.size();
+        TreeNode* root = new TreeNode(toInt(parsed[0]));
+        bfsQ.push(root);
+        int i = 1;
+        
+        while(!bfsQ.empty() || i + 1 < len){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            if(parsed[i] != "null")
+            {
+                curr->left = new TreeNode(toInt(parsed[i]));
+                bfsQ.push(curr->left);
+            }
+            if(parsed[i+1] != "null")
+            {
+                curr->right = new TreeNode(toInt(parsed[i+1]));
+                bfsQ.push(curr->right);
+            }
+            i += 2;
+        }
+        
+        return root;
+    }
+    
+    void parseString(string &s, vector<string>&parsed){
+        int len = s.length();
+        int i = 0;
+        while(i < len){
+            string temp = "";
+            int j = i;
+            while(j < len){
+                if(s[j] == ',')
+                    break;
+                temp.push_back(s[j]);
+                j++;
+            }
+            i = j + 1;
+            parsed.push_back(temp);
+        }
+    }
+    
+    string toString(int num){
+        if(num == 0) return "0";
+        bool neg = num < 0 ? true : false;
+        if(neg) num *= -1;
+        string ans = "";
+        
+        while(num != 0){
+            ans.push_back(num % 10 + 48);
+            num /= 10;
+        }
+        
+        reverse(ans.begin(), ans.end());
+        if(neg) ans = "-"+ ans;
+        
+        return ans;
+    }
+    
+    int toInt(string s){
+        int mul = s[0] == '-' ? -1: 1;
+        int i = s[0] == '-' ? 1 : 0;
+        int len = s.length();
+        int ans = 0;
+        while(i != len){
+            ans = ans * 10 + s[i] - 48;
+            i++;
+        }
+        
+        return ans * mul;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));

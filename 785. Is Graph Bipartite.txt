@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int>color(101);
+        int size = graph.size();
+        
+        for (int node = 0; node < size; node++){
+            queue<int> bfsQ;
+            if (color[node] != 0) continue;
+            
+            bfsQ.push(node);
+            int currColor = 1;
+            color[0] = currColor;
+            while (!bfsQ.empty()){
+                int curr = bfsQ.front();
+                bfsQ.pop();
+                int len = graph[curr].size();
+                currColor = color[curr] % 2 + 1;
+                for(int i = 0; i < len; i++){
+                    int child = graph[curr][i];
+                    if(color[child] == 0){
+                        bfsQ.push(child);
+                        color[child] = currColor;
+                    }
+                    else if(color[child] != currColor ){
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+};

@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> diStringMatch(string s) {
+        int len = s.length();
+        int maxAvailable = len;
+        int minAvailable = 0;
+        vector<int>result;
+        
+        for (int i  = 0; i < len; i++){
+            if(s[i] == 'I'){
+                result.push_back(minAvailable);
+                minAvailable++;
+            }
+            else{
+                result.push_back(maxAvailable);
+                maxAvailable--;
+            }
+        }
+        
+        result.push_back(minAvailable);
+        
+        return result;
+    }
+};

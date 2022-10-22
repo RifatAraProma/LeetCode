@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        map< pair<TreeNode*,bool>, int>dp;
+        
+        int sum = max(dfsRob(root, dp), dfsNotRob(root, dp));
+        
+        return sum;
+    }
+    
+    int dfsRob(TreeNode* root, map< pair<TreeNode*,bool>, int> &dp){
+        if(root == NULL) return 0;
+        
+        if(dp.find({root, true}) != dp.end()){
+            return dp[{root, true}];
+        }
+        
+        dp[{root, true}] = root->val + dfsNotRob(root->left, dp) + dfsNotRob(root->right, dp);
+        
+        return dp[{root,true}];
+    }
+    
+    int dfsNotRob(TreeNode* root, map< pair<TreeNode*,bool>, int> &dp){
+        if(root == NULL) return 0;
+                
+        if(dp.find({root, false}) != dp.end()){
+            return dp[{root, false}];
+        }
+        
+        dp[{root, false}] = max(dfsRob(root->left, dp), dfsNotRob(root->left, dp)) + max(dfsRob(root->right, dp),dfsNotRob(root->right, dp));
+        
+        return dp[{root, false}];
+    }
+};

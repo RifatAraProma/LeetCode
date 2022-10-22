@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        map<string, bool>wordMap;
+        
+        for(auto word : wordList){
+            wordMap[word] = true;
+        }
+        
+        return shortestTransSeq(wordMap, beginWord, endWord);
+    }
+    
+    int shortestTransSeq(map<string, bool>&wordMap, string &beginW, string &endW){
+        queue<string>bfsQ;
+        map<string, int>level;
+        int len = beginW.length();
+        map<string, bool>visited;
+        
+        bfsQ.push(beginW);
+        level[beginW] = 1;
+        visited[beginW] = true;
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            
+            for(int i  = 0; i < len; i++){
+                string copy = curr;
+                for(int j = 97; j <= 122; j++){
+                    copy[i] = j;
+                    if(wordMap[copy] && !visited[copy]){
+                        bfsQ.push(copy);
+                        visited[copy] = true;
+                        level[copy] = level[curr] + 1;
+                        if(copy == endW) return level[copy];
+                    }
+                }
+            }
+            
+        }
+        
+        return 0;
+    }
+};

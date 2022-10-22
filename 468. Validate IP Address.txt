@@ -1,0 +1,77 @@
+class Solution {
+public:
+    string validIPAddress(string queryIP) {
+        int len = queryIP.length();
+
+        if(len <= 15 && isIPv4(queryIP)) return "IPv4";
+        if(len <= 39 && isIPv6(queryIP)) return "IPv6";
+        
+        return "Neither";
+    }
+    
+    bool isIPv4(string s){
+        int len = s.length();
+        string temp = "";
+        int dotCounter = 0;
+        int numCounter = 0;
+        for(int i = 0; i < len; i++){
+            if(s[i] == '.'){
+                dotCounter++;
+                if(temp != "") numCounter++;
+                int num = toInt(temp);
+                if(dotCounter > 3 || num > 255) return false;
+                temp = "";
+                continue;
+            }
+            
+            if(s[i] != '.' && (s[i] < '0' || s[i] > '9')) return false;
+            
+            temp.push_back(s[i]);
+            
+            if(temp.length() > 1 && temp[0] == '0') return false;
+        }
+        
+        if(temp != "") numCounter++;
+
+        return numCounter == 4 && toInt(temp) <= 255;
+    }
+    
+    bool isIPv6(string s){
+        int len = s.length();
+        int colonCounter = 0;
+        int numCounter = 0;
+        string temp = "";
+        
+        for(int i  = 0; i < len; i++){
+            if(s[i] == ':'){
+                colonCounter++;
+                if(temp != "") numCounter++;
+                if(colonCounter > 7 || temp.length() > 4) return false;
+                temp = "";
+                continue;
+            }
+            
+            if((s[i] >= '0' && s[i] <= '9') || (s[i] >= 'a' && s[i] <= 'f') || (s[i] >= 'A' && s[i] <= 'F')){
+                temp.push_back(s[i]);
+            }
+            else{
+                return false;
+            }
+        }
+        
+        if(temp != "") numCounter++;
+        
+        return numCounter == 8 && temp.length() <= 4;
+    }
+    
+    int toInt(string s){
+        int num = 0;
+        int len = s.length();
+        
+        for(int i  = 0; i < len; i++){
+            num = num * 10 + s[i] - 48;
+        }
+        
+        return num;
+    }
+};

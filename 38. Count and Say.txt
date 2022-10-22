@@ -1,0 +1,36 @@
+class Solution {
+public:
+    
+    string countAndSay(int n){
+        if (n == 1) return "1";
+        
+        else return freqCounter(countAndSay(n-1));
+    }
+    
+    string freqCounter(string n){
+        int counter = 1;
+        int len = n.length();
+        string output = "";
+        if (len == 1) {
+            output.push_back('1');
+            output.push_back(n[0]);
+            return output;
+        } 
+        for (int i = 1; i < len; i++){
+            if (n[i - 1] == n[i]){
+                counter++;
+            }
+            else{
+                output.push_back(counter+ 48);
+                output.push_back(n[i - 1]);
+                counter = 1;
+            }
+        }
+        
+        output.push_back(counter+ 48);
+        output.push_back(n[len - 1]);
+        
+        return output;
+    }
+    
+};

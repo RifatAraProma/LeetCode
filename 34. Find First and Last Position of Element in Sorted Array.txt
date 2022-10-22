@@ -1,0 +1,60 @@
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int>output;
+        
+        int lB = lowerBound(nums, target);
+        if (lB == nums.size() || nums[lB] != target){
+            output.push_back(-1);
+            output.push_back(-1);
+           
+        }
+        else{
+            output.push_back(lB);
+            output.push_back( upperBound(nums, target));
+        }
+
+        
+        return output;
+    }
+    
+    // both upper and lower bound e answer low e thakbe. lower e low itself, upper e low - 1
+    
+    int lowerBound(vector<int>&nums, int target){
+        int low = 0;
+        int high = nums.size() - 1;
+        int mid;
+        
+        while(low <= high){
+            mid = (low + high) / 2;
+            
+            if (nums[mid] < target){
+                low = mid + 1;
+            }
+            else{
+                high = mid - 1; // lower bound e high move kore target peleo
+            }
+        }
+        
+        return low;
+    }
+    
+    int upperBound(vector<int>&nums, int target){
+        int mid;
+        int low = 0;
+        int high = nums.size() - 1;
+        
+        while (low <= high){
+            mid = (low + high) / 2;
+            if (nums[mid] > target){
+                high = mid - 1;
+            }
+            else{
+                low = mid + 1; // upper bound e low move kore target peleo
+            }
+        }
+        
+        return low - 1;
+        
+    }
+};

@@ -1,0 +1,56 @@
+class Solution {
+public:
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+        BFS(click[0], click[1], board, board.size(), board[0].size());
+        
+        return board;
+    }
+    
+    void BFS(int r, int c, vector<vector<char>>&board, int row, int col){
+        if(isValid(r, c, row, col) &&board[r][c] == 'M'){
+            board[r][c] = 'X';
+            return;
+        }
+        else if(board[r][c] == 'E'){
+            queue<pair<int, int>> bfsQ;
+            bool visited[51][51] = {false};
+            bfsQ.push({r,c});
+            visited[r][c] = true;
+            int dirX[] ={1, -1, 0, 0, 1, -1, 1, -1};
+            int dirY[] = {0, 0, 1, -1, 1, 1, -1, -1 };
+            
+            while (!bfsQ.empty()){
+                pair<int, int>cell = bfsQ.front();
+                bfsQ.pop();
+                int mine = 0;
+                for (int i  = 0; i < 8; i++){
+                    int childR = cell.first + dirX[i];
+                    int childC = cell.second + dirY[i];
+                    if (isValid(childR, childC, row, col) && board[childR][childC] == 'M')
+                        mine++;          
+                }
+
+                if (mine != 0)
+                    board[cell.first][cell.second] = mine + 48;
+    
+                else{
+                    board[cell.first][cell.second] = 'B';
+                    for (int i  = 0; i < 8; i++){
+                    int childR = cell.first + dirX[i];
+                    int childC = cell.second + dirY[i];
+                        if (isValid(childR, childC, row, col) && board[childR][childC] == 'E' && !visited[childR][childC]){
+                            bfsQ.push({childR, childC});
+                            visited[childR][childC] = true;
+                        }       
+                    }
+                }
+            }
+        }
+        return;
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+       
+};

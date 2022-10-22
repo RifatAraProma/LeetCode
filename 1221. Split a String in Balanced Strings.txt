@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int balancedStringSplit(string s) {
+        int len = s.length();
+        int RCounter = 0;
+        int LCounter = 0;
+        int result = 0;
+        
+        for(int i = 0; i < len; i++){
+            if(s[i] == 'R') RCounter++;
+            else LCounter++;
+            
+            if (RCounter == LCounter){
+                result++;
+                RCounter = 0;
+                LCounter = 0;
+            } 
+        }
+        
+        return result;
+    }
+};

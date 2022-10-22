@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        int high = heights.size() - 1;
+        int low = 0;
+        int ans = -1;
+        
+        while (low <= high){
+            int mid = (low + high) / 2;
+            
+            if (isReachable(heights, bricks, ladders, mid)){
+                ans = mid;
+                low = mid + 1;
+            }
+            else{
+                high = mid - 1;
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool isReachable(vector<int>& heights, int bricks, int ladders, int dest){
+        priority_queue<int>maxHeightDiff;
+        int reqBricks = 0;
+        for (int i = 1; i <= dest; i++){
+            if(heights[i] > heights[i - 1]){
+                maxHeightDiff.push(heights[i] - heights[i -1]);
+            }
+        }
+        
+        while (ladders != 0 && !maxHeightDiff.empty()){
+            ladders--;
+            maxHeightDiff.pop();
+        }
+        
+        while(!maxHeightDiff.empty()){
+            reqBricks += maxHeightDiff.top();
+            maxHeightDiff.pop();
+        }
+        
+        return reqBricks <= bricks;
+    }
+};

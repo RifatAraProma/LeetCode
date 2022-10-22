@@ -1,0 +1,62 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int>courseOrder;
+        vector<vector<int>> edges(numCourses + 1);
+        vector<int>inDegree(numCourses + 1);
+        
+        for (int i = 0; i <= numCourses; i++){
+            vector<int>temp;
+            edges.push_back(temp);
+        }
+
+        for (auto course: prerequisites){
+            int dependent = course[0];
+            int req = course[1];
+            edges[req].push_back(dependent);
+            inDegree[dependent]++;
+        }
+        
+        int dummyNode = numCourses;
+        
+        for (int i = 0; i < numCourses; i++){
+            if(!inDegree[i]){
+                inDegree[i]++;
+                edges[dummyNode].push_back(i);
+            }
+        }
+        
+        courseOrder = courseOrderBFS(edges, dummyNode, inDegree);
+        
+        if (courseOrder.size() < numCourses )
+            courseOrder.clear();
+        
+        return courseOrder;
+    }
+    
+    vector<int> courseOrderBFS(vector<vector<int>> &edges, int src, vector<int> &inDegree){
+        queue<int>bfsQ;
+        int visited[2002] = {0};
+        bfsQ.push(src);
+        visited[src]++;
+        vector<int> courseOrder;
+        
+        while(! bfsQ.empty()){
+            int curr = bfsQ.front();
+            bfsQ.pop();
+            int len = edges[curr].size();
+            
+            for (int i = 0; i < len; i++){
+                int child = edges[curr][i];
+                visited[child]++;
+                if (visited[child] == inDegree[child]){
+                    bfsQ.push(child);
+                    courseOrder.push_back(child);
+                }
+            }
+        }
+        
+        return courseOrder;
+    }
+    
+};

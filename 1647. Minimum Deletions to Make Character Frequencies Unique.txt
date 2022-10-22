@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minDeletions(string s) {
+        sort(s.begin(), s.end());
+        int len = s.length();
+        vector<int>charCounter(27);
+        vector<bool>freqCounter(100005);
+        int ans = 0;
+        s.push_back('*');
+        for(int i = 0; i < len; i++){
+            charCounter[s[i] - 'a']++;
+            if(s[i] != s[i + 1]){
+                while(freqCounter[charCounter[s[i] - 'a']] && charCounter[s[i] - 'a'] != 0){
+                    charCounter[s[i] - 'a']--;
+                    ans++;
+                }
+                freqCounter[charCounter[s[i] - 'a']] = true;
+            }
+        }
+        return ans;
+    }
+};

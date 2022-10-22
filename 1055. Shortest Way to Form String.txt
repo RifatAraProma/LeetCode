@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int shortestWay(string source, string target) {
+        int counter = 1;
+        int lenTar = target.length();
+        int lenSrc = source.length();
+        string prefix = "";
+        
+        for(int i = 0; i < lenTar; i++){
+            bool match = false;
+            for(int j  = 0; j < lenSrc; j++){
+                if(source[j] == target[i]){
+                    match = true;
+                    break;
+                }
+            }
+            if(!match) return -1;
+        }
+        
+        for(int i = 0; i < lenTar; i++){
+            prefix.push_back(target[i]);
+            
+            if(!isSubSeq(source, prefix)){
+                prefix = "";
+                prefix.push_back(target[i]);
+                counter++;
+            }
+        }
+        
+        return counter;
+    }
+    
+    bool isSubSeq(string &source, string &s){
+        int len = s.length();
+        int lenSrc = source.length();
+        int subIndex = 0;
+        for(int i  = 0; i < lenSrc; i++){
+            if(source[i] == s[subIndex]){
+                subIndex++;
+                if(subIndex == len) break;
+            }
+        }
+        
+        return subIndex == len;
+    }
+};

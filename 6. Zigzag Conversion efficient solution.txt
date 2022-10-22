@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows == 1) return s;
+        string output = "";
+        int len = s.length();
+        int currRow = 1;
+        int i = len;
+        while (currRow <= numRows){
+            int i = currRow - 1;
+            bool goingUp = true;
+            while (i < len){
+                output.push_back(s[i]);
+                if (currRow == 1 || currRow == numRows){
+                    // +1 for the last/first element of a single line
+                    // (numRows - 2) tp find out the intermediate rows except first and last
+                    // * 2 as there will be 2 numbers in each intermediate rows before                              current row appears
+                    // + 1 to find out curr position;
+                    i += 1 + (numRows - 2) * 2 + 1;
+                }
+                else if (goingUp){
+                    i += 2 * (numRows - currRow);
+                    goingUp = false;
+                }
+                else {
+                    i += 2 * (currRow - 1);
+                    goingUp = true;
+                }
+            }
+            
+            currRow++;
+        }
+        
+        return output;
+    }
+};

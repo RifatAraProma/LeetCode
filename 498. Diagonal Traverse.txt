@@ -1,0 +1,44 @@
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& mat) {
+        int row = mat.size();
+        int col = mat[0].size();
+        vector<int>ans;
+        int r = 0, c = 0;
+        bool up = true;
+        
+        while(r < row && c < col){
+            ans.push_back(mat[r][c]);
+            if(r == row - 1 && c == col - 1) break;
+            if(up){
+                if(isValid(row, col, r-1, c+1)){
+                    r--;
+                    c++;    
+                }
+                else{
+                    up = false;
+                    if(isValid(row, col, r, c+1)) c++;
+                    else r++;
+                }
+                
+            }
+            else{
+                if(isValid(row, col, r+1, c-1)){
+                    r++;
+                    c--;
+                }
+                else{
+                    up = true;
+                    if(isValid(row, col, r+1, c)) r++;
+                    else c++;
+                }
+            }
+        }
+        
+        return ans;
+    }
+    
+    bool isValid(int row, int col, int r, int c){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};

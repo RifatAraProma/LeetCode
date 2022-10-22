@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string minRemoveToMakeValid(string s) {
+        stack<int>bracketStack;
+        int len = s.length();
+        string output = "";
+        
+        for (int i = 0 ; i < len; i++){
+            if (s[i] == '('){
+                bracketStack.push(i);
+            }
+            else if (s[i] == ')'){
+                if (!bracketStack.empty()){
+                    bracketStack.pop();
+                }
+                else{
+                    s[i] = '.';
+                }
+            }
+        }
+        
+        while (!bracketStack.empty()){
+            s[bracketStack.top()] = '.';
+            bracketStack.pop();
+        }
+
+        
+        for (int i = 0; i < len; i++){
+            if (s[i] != '.')
+                output.push_back(s[i]);
+        }
+
+        
+        return output;
+    }
+};

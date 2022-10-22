@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int low = 1, high = nums.size() - 1;
+        int duplicate;
+        
+        while (low <= high){
+            int mid = (low + high) / 2;
+            
+            if(equalOrLessCounter(nums, mid) > mid){
+                 duplicate = mid;
+                 high = mid - 1;
+            }
+            else{
+               low = mid + 1;
+            }
+            
+        }
+        
+        return duplicate;
+
+    }
+    
+    int equalOrLessCounter(vector<int>&nums, int number){
+        int counter = 0;
+        int len = nums.size();
+        
+        for (int i = 0; i < len; i++){
+            if (nums[i]<= number){
+                counter++;
+            }
+        }
+        
+        return counter;
+    }
+};

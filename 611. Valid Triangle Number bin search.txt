@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        int len = nums.size();
+        int res = 0;
+        sort(nums.begin(), nums.begin() + len);
+        for (int i = 0; i < len - 2; i++){
+            for (int j = i + 1; j < len - 1 && nums[i] != 0; j++){
+                int sum = nums[i] + nums[j];
+                int low = j + 1;
+                int high = len - 1;
+                int mid;
+                while(low <= high){
+                    mid = (low + high) / 2;
+                    if(nums[mid] >= sum){
+                        high = mid -1;
+                    }
+                    else{
+                        low = mid + 1;
+                    }
+                }
+                // 0 index. Therefore, there are j + 1 numbers before low 
+                res += low - (j + 1);
+            }
+        }
+        
+        return res;
+    }
+};

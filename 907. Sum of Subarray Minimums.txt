@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        long long int ans = 0;
+        long long int mod = 1000000007;
+        int len= arr.size();
+        // had to use long long to avoid run time error.
+        vector<long long int>left(len);
+        vector<long long int>right(len);
+        
+        for(int i = 0; i < len; i++){
+            //for the smallest element, it has len - i elements on right for which it is smallest. as right is updated conditionally, it has to be initialized as if each element is the smallest for all the elements that are on the right.
+            right[i] = len - i;
+        } 
+        
+        previousLessElement(arr, left);
+        nextLessElement(arr, right);
+        
+        for(int i = 0; i < len; i++){
+            ans += arr[i] * left[i] * right[i];
+            ans %= mod;
+        }
+        
+        return ans;
+    }
+    
+    void previousLessElement(vector<int>&arr, vector<long long int>&left){
+        int len = arr.size();
+        stack<pair<int, int> >monotonicStack;
+        
+        for(int i = 0; i < len; i++){
+            while(!monotonicStack.empty() && monotonicStack.top().first > arr[i]){
+                monotonicStack.pop();
+            }
+            
+            left[i] = monotonicStack.empty() ? i + 1 : i - monotonicStack.top().second; // i + 1 as if we are working with index 0, it means we have seen 1 smaller or equal to the current element so far
+
+            monotonicStack.push({arr[i], i});
+        }
+        
+    }
+    
+    void nextLessElement(vector<int>&arr, vector<long long int>&right){
+        int len = arr.size();
+        stack<pair<int, int> >monotonicStack;
+        
+        for(int i = 0; i < len; i++){
+            while(!monotonicStack.empty() && monotonicStack.top().first > arr[i]){
+                auto curr = monotonicStack.top();
+                monotonicStack.pop();
+                right[curr.second] = i - curr.second;
+            }
+            monotonicStack.push({arr[i], i});
+        }
+    }
+};

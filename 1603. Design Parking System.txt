@@ -1,0 +1,24 @@
+class ParkingSystem {
+public:
+    vector<int>capacity;
+    
+    ParkingSystem(int big, int medium, int small) {
+        capacity = vector<int>(4);
+        capacity[1] = big;
+        capacity[2] = medium;
+        capacity[3] = small;
+    }
+    
+    bool addCar(int carType) {
+        if(capacity[carType] == 0) return false;
+        
+        capacity[carType]--;
+        return true;
+    }
+};
+
+/**
+ * Your ParkingSystem object will be instantiated and called as such:
+ * ParkingSystem* obj = new ParkingSystem(big, medium, small);
+ * bool param_1 = obj->addCar(carType);
+ */

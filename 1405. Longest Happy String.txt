@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string longestDiverseString(int a, int b, int c) {
+        priority_queue<pair<int,char>> pq;
+        
+        pq.push(make_pair(a, 'a'));
+        pq.push(make_pair(b, 'b'));
+        pq.push(make_pair(c, 'c'));
+        char turn = '*';
+        string output = "";
+        
+        while(pq.top().first != 0){
+            pair<int, char> temp = pq.top();
+            pq.pop(); 
+            if (turn == temp.second){
+                pair<int, char>secondMax = pq.top();
+                pq.pop();
+                if (secondMax.first == 0) break;
+                
+                output.push_back(secondMax.second);
+                secondMax.first--;
+                
+                pq.push(temp);
+                pq.push(secondMax);
+            
+                turn = secondMax.second;
+            }
+            else{
+                output.push_back(temp.second);
+                temp.first--;
+                if (temp.first >= 2){
+                    output.push_back(temp.second);
+                    temp.first--;
+                }
+                    
+                pq.push(temp);
+                
+                turn = temp.second;
+            }
+        }
+        
+        return output;
+    }
+    
+};

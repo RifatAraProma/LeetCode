@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int minSwaps(string s) {
+        int probOneCounter = 0;
+        int probZeroCounter = 0;
+        int oneCounter = 0;
+        int zeroCounter = 0;
+        int len = s.length();
+        
+        for(int i = 0; i < len; i++){
+            if(s[i] == '0') zeroCounter++;
+            else oneCounter++;
+        }
+        
+        if(abs(oneCounter - zeroCounter) > 1) return -1;
+        
+        string startWithOne = "";
+        string startWithZero = "";
+        char digitOne = '1';
+        char digitZero = '0';
+        
+        for(int i = 0; i < len; i++){
+            if(i % 2 == 0){
+                startWithOne.push_back('1');
+                startWithZero.push_back('0');
+            }
+            else{
+                startWithOne.push_back('0');
+                startWithZero.push_back('1');
+            }   
+        }
+        
+        int resOne = 0;
+        int resZero = 0;
+
+        for(int i = 0; i < len; i++){
+            if(s[i] != startWithOne[i]) resOne++;
+            if(s[i] != startWithZero[i]) resZero++;
+        }
+        
+        if(oneCounter > zeroCounter) resZero = len;
+        if(zeroCounter > oneCounter) resOne = len;
+        
+        if(resOne % 2 != 0) resOne++;
+        if(resZero % 2 != 0) resZero++;
+        
+        return min(resOne / 2, resZero / 2);
+    }
+};

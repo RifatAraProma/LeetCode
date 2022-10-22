@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_map<string, bool>wordMap;
+        
+        for(auto word : wordList){
+            wordMap[word] = true;
+        }
+        
+        if(wordMap.find(endWord) == wordMap.end()) return 0;
+        
+        return shortestTransSeq(wordMap, beginWord, endWord);
+    }
+    
+    int shortestTransSeq(unordered_map<string, bool>&wordMap, string &beginW, string &endW){
+        queue<string>bfsQ;
+        unordered_map<string, int>level;
+        int len = beginW.length();
+        unordered_map<string, bool>visited;
+        
+        bfsQ.push(beginW);
+        level[beginW] = 1;
+        visited[beginW] = true;
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            
+            for(int i  = 0; i < len; i++){
+                string copy = curr;
+                for(int j = 97; j <= 122; j++){
+                    copy[i] = j;
+                    if(wordMap.find(copy) != wordMap.end() && visited.find(copy) == visited.end()){
+                        bfsQ.push(copy);
+                        visited[copy] = true;
+                        level[copy] = level[curr] + 1;
+                        if(copy == endW) return level[copy];
+                    }
+                }
+            }
+            
+        }
+        
+        return 0;
+    }
+};

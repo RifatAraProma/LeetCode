@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        
+        sort(intervals.begin(), intervals.end(), [](vector<int>&lhs, vector<int>&rhs){
+           return lhs[0] < rhs[0]; 
+        });
+        
+        int maxRoom = 0;
+        priority_queue<int>rooms;
+        int len =  intervals.size();
+        
+        for(int i = 0; i < len; i++){
+            int startTime = intervals[i][0];
+            int endTime = intervals[i][1];
+            
+            if(!rooms.empty() && -rooms.top() <= startTime){
+                rooms.pop();
+            }
+            rooms.push(-endTime);
+            maxRoom = max(maxRoom, (int)rooms.size());
+        }
+        
+        return maxRoom;
+    }
+};

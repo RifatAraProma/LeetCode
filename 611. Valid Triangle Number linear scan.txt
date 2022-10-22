@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        int len = nums.size();
+        int res = 0;
+        sort(nums.begin(), nums.begin() + len);
+        for (int i = 0; i < len - 2; i++){
+            //ekdom shurute k  i + 1 diye initialized
+            int k = i + 2;
+            for (int j = i + 1; j < len - 1 && nums[i] != 0; j++){
+                int sum = nums[i] + nums[j];
+                // protibar k j + 1 diye start na kore age jekhane shesh hoise
+                // okhan thekei abar check korbe. because last k okhanei point kortese
+                // jekhane nums[k] >= sum. to jodi age appear kora number er jonnei nums[k]
+                // equal or greater hoy, tar mane current jei j value diye kaaj kortesi otar
+                // jonne nums[j] + nums[i] oboshhoi nums[k] er theke boro or equal hobe.
+                // mane nums[k - 1] already chhoto ager iteration er j tar jonne. to current
+		    // j er jonne to chhoto hobei. notun kore ota theke check kora lagbe na
+		    // ekhane j er upor depend kore k agay emon na. k ekbar nije nije scan kore j ekbar kore
+		    // so more like vitore 2n iteration hochhe one for j one for k. totally n^2
+                while (k < len && nums[k] < sum){
+                    k++;
+                }
+               res += k - (j + 1);
+            }
+        }
+        
+        return res;
+    }
+};

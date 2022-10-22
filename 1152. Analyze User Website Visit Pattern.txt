@@ -1,0 +1,66 @@
+class Solution {
+public:
+    vector<string> mostVisitedPattern(vector<string>& username, vector<int>& timestamp, vector<string>& website) {
+        map<string, vector<string>>userWebsiteMap;
+        int len = username.size();
+        map<string, int>websiteCombination;
+        priority_queue<pair<int, pair<string, string> > >timeBasedPQ;
+        vector<string>users;
+        map<string, string>combinationUserMap;
+        vector<vector<string>>combinations;
+        
+        for(int i = 0; i < len; i++){
+            timeBasedPQ.push({-timestamp[i], {username[i], website[i]}});
+        }
+        
+        while(!timeBasedPQ.empty()){
+            auto curr = timeBasedPQ.top();
+            timeBasedPQ.pop();
+            auto user = curr.second.first;
+            auto web = curr.second.second;
+
+            if(userWebsiteMap.find(user) == userWebsiteMap.end())
+                users.push_back(user);
+            
+            userWebsiteMap[user].push_back(web);
+        }
+        
+        int maxVisit = 0;
+        vector<string> res;
+        for(auto user: users){
+            int webLen = userWebsiteMap[user].size();
+            vector<string>sites = userWebsiteMap[user];
+            for(int i = 0; i < webLen; i++){
+                
+                for(int j = i + 1; j < webLen; j++){
+                    
+                        for(int k = j + 1; k < webLen; k++){
+                            string temp = "";
+                            temp += sites[i] + " " + sites[j] + " " + sites[k];
+                            if(combinationUserMap.find(temp) != combinationUserMap.end() && combinationUserMap[temp] == user) continue;
+                            
+                            combinationUserMap[temp] = user;
+                            websiteCombination[temp]++;
+                            if(maxVisit < websiteCombination[temp]){
+                                maxVisit = websiteCombination[temp];
+                            }
+                            combinations.push_back({sites[i], sites[j], sites[k]});
+
+                        }        
+                }
+            }
+        }
+        
+        sort(combinations.begin(), combinations.end());
+        for(auto pattern : combinations){
+            string temp = pattern[0] + " " + pattern[1] + " " + pattern[2];
+            if(websiteCombination[temp] == maxVisit){
+                res = pattern;
+                break;
+            }
+        }
+        
+        return res;
+        
+    }
+};

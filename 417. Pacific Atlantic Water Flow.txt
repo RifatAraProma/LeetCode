@@ -1,0 +1,98 @@
+class Solution {
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        vector<vector<pair<bool,bool>>>reachable;
+        int row = heights.size();
+        int col = heights[0].size();
+        vector<vector<int>>result;
+        vector<pair<int, int>> sourcesPacific;
+        vector<pair<int, int>> sourcesAtlantic;
+        
+        for(int i = 0; i < 201; i++){
+            vector<pair<bool,bool>>temp(201);
+            reachable.push_back(temp);    
+        }
+        
+        
+        for (int i = 0; i < row; i++){
+            reachable[i][0].first = true;
+            reachable[i][col-1].second = true;
+            sourcesPacific.push_back({i,0});
+            sourcesAtlantic.push_back({i, col - 1});
+        }
+        
+        
+        for (int i = 0; i < col; i++){
+            reachable[0][i].first = true;
+            reachable[row-1][i].second = true;
+            sourcesPacific.push_back({0,i});
+            sourcesAtlantic.push_back({row-1, i});
+        }
+               
+        BFS(heights, reachable, sourcesPacific, true);
+        BFS(heights, reachable, sourcesAtlantic, false);
+        
+        getResult(reachable, result, row, col);
+        
+        return result;
+    }
+    
+    void getResult(vector<vector<pair<bool,bool>>> &reachable, vector<vector<int>> &result, int row, int col){
+        
+        for(int i = 0 ; i < row; i++){
+            for(int j = 0; j < col ; j++){
+                if(reachable[i][j].first && reachable[i][j].second){
+                    vector<int>temp;
+                    temp.push_back(i);
+                    temp.push_back(j);
+                    result.push_back(temp);
+                }
+            }
+        }
+        
+    }
+    
+    void BFS(vector<vector<int>>&heights, vector<vector<pair<bool,bool>>> &reachable, vector<pair<int, int>> &sources, bool pacific){
+        int row = heights.size();
+        int col = heights[0].size();
+        vector<vector<bool>>visited;
+        
+        int dirX[] = {1, -1, 0, 0};
+        int dirY[] = {0, 0, 1, -1};
+        
+        for (int i = 0; i < 201; i++){
+            vector<bool>temp(201);
+            visited.push_back(temp);
+        }
+        
+        queue<pair<int, int>>bfsQ;
+        
+        for(auto src : sources){
+            bfsQ.push(src);
+            visited[src.first][src.second] = true;
+        }
+        
+        while(!bfsQ.empty()){
+            auto curr = bfsQ.front();
+            bfsQ.pop();
+            int currX = curr.first;
+            int currY = curr.second;
+            
+            for (int i = 0; i < 4; i++){
+                int x = currX + dirX[i];
+                int y = currY + dirY[i];
+                
+                if(isValid(x, y, row, col) && !visited[x][y] && heights[x][y] >= heights[currX][currY]){
+                    visited[x][y] = true;
+                    bfsQ.push({x, y});
+                    if(pacific) reachable[x][y].first = true;
+                    else reachable[x][y].second = true;
+                }
+            }
+        }
+    }
+    
+    bool isValid(int r, int c, int row, int col){
+        return r >= 0 && r < row && c >= 0 && c < col;
+    }
+};

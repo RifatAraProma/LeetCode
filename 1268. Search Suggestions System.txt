@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+        sort(products.begin(), products.end());
+        int len = searchWord.length();
+        vector<vector<string>>result(len);
+        string prefix= "";
+        int proLen = products.size();
+        
+        for(int i = 0; i < len; i++){
+            prefix.push_back(searchWord[i]);
+            
+            int startIndex = lower_bound(products.begin(), products.end(), prefix) - products.begin();
+            
+            for(int j = startIndex; j < startIndex + 3 && j < proLen; j++){
+                auto product = products[j];
+                if(!isValid(product, prefix)) break;
+                
+                result[i].push_back(product);
+            }
+        }
+        
+        return result;
+    }
+    
+    bool isValid(string s, string target){
+        int len = target.length();
+        
+        for(int i  = 0; i < len; i++){
+            if(s[i] != target[i]) return false;
+        }
+        
+        return true;
+    }
+};

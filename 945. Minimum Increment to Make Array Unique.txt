@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int minIncrementForUnique(vector<int>& nums) {
+        unordered_map<int, bool> numMap;
+        int len = nums.size();
+        int move  = 0;
+        sort(nums.begin(), nums.end());
+        int available;
+        
+        for (int i  = 0; i < len; i++){
+            if(numMap.find(nums[i]) != numMap.end()){
+                move += available - nums[i];
+                nums[i] += available - nums[i];
+            }
+            available = nums[i] + 1;
+            numMap[nums[i]] = true;
+        }
+        
+        return move;
+    }
+};

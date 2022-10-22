@@ -1,0 +1,53 @@
+class Solution {
+public:
+    vector<int> platesBetweenCandles(string s, vector<vector<int>>& queries) {
+        vector<int>ans;
+        int len = s.length();
+        vector<int>platesSoFar(len + 1);
+        vector<int>leftCandlePos(len + 1);
+        vector<int>rightCandlePos(len + 1);
+        int plateCounter = 0;
+        
+        int leftCandle = -1;
+        for(int i = 0; i < len; i++){
+            if(s[i] == '|') leftCandle = i;
+            
+            leftCandlePos[i] = leftCandle;
+        }
+        
+        int rightCandle = len;
+        for(int i = len - 1; i >= 0; i--){
+            if(s[i] == '|') rightCandle = i;
+            
+            rightCandlePos[i] = rightCandle;
+        }
+        
+        int it = 0;
+        while(it < len && s[it]!= '|') it++;
+        it++;
+        
+        while(it < len){
+            platesSoFar[it] = platesSoFar[it - 1];
+            
+            if(s[it] == '*') plateCounter++;
+            else{
+                platesSoFar[it] += plateCounter;
+                plateCounter = 0;
+            }
+            it++;
+        }
+        
+        for(auto q : queries){
+            int rightMostCandle = leftCandlePos[q[1]];
+            int leftMostCandle = rightCandlePos[q[0]];
+            
+            if(rightMostCandle < 0 || leftMostCandle == len ||  rightMostCandle < q[0] || rightMostCandle > q[1] || leftMostCandle < q[0] || leftMostCandle > q[1]){
+                ans.push_back(0);
+                continue;
+            }
+            ans.push_back(platesSoFar[rightMostCandle] - platesSoFar[leftMostCandle]);
+        }
+        
+        return ans;
+    }
+};

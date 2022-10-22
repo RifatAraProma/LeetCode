@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool canReach(vector<int>& arr, int start) {
+        vector<bool>visited(50001);
+        
+        return dfs(arr, start, visited);
+    }
+    
+    bool dfs(vector<int>&arr, int src, vector<bool>&visited){
+        if(arr[src] == 0) return true;
+        
+        visited[src] = true;
+        vector<int>children;
+        children.push_back(src + arr[src]);
+        children.push_back(src - arr[src]);
+        bool ans = false;
+        
+        for(auto child : children){
+            if(child < arr.size() && child >= 0 && !visited[child])
+                ans |= dfs(arr, child, visited);
+        }
+        
+        return ans;
+    }
+    
+};

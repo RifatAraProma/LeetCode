@@ -1,0 +1,87 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        vector<int> results;
+        map<TreeNode*, TreeNode*> parent;
+        parentBuilder(root, parent);
+        
+        TreeNode* curr = target;
+        while(curr != NULL && k >= 0){
+            if(k != 0)
+                buildNodeList(curr, k, results, target);
+            else
+                results.push_back(curr->val);
+            
+            target = curr;
+            curr = parent[curr];
+            k--;
+        }
+           
+        return results;
+    }
+    
+    void buildNodeList(TreeNode* root, int k, vector<int>& results, TreeNode* skip){
+        queue<TreeNode*> bfsQ;
+        vector<int>level(501);
+        bfsQ.push(root);
+        level[root->val] = 0;
+        
+        while(!bfsQ.empty()){
+            TreeNode* curr = bfsQ.front();
+            bfsQ.pop();
+           
+            TreeNode* lC = curr->left;
+            TreeNode* rC = curr->right;
+            
+            if(lC != NULL && lC != skip){
+                level[lC->val] = level[curr->val] + 1;
+                
+                if(level[lC->val] == k) results.push_back(lC->val);
+                else bfsQ.push(lC);
+            }
+            if(rC != NULL && rC != skip){
+                level[rC->val] = level[curr->val] + 1;
+                
+                if(level[rC->val] == k) results.push_back(rC->val);
+                else bfsQ.push(rC);
+            }
+            
+        }
+    }
+    
+    void parentBuilder(TreeNode* root, map<TreeNode*, TreeNode*> &parent){
+        if(root == NULL) return;
+        
+        queue<TreeNode*>bfsQ;
+        bfsQ.push(root);
+        parent[root] = NULL;
+        
+        while (!bfsQ.empty()){
+            TreeNode* curr = bfsQ.front();
+            bfsQ.pop();
+            TreeNode* lC = curr->left;
+            TreeNode* rC = curr->right;
+            
+            if(lC != NULL){
+                bfsQ.push(lC);
+                parent[lC] = curr;
+            }
+            if(rC != NULL){
+                bfsQ.push(rC);
+                parent[rC] = curr;
+            }
+            
+        }
+        
+        return;
+    }
+};

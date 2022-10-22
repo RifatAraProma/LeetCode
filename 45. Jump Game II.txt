@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int len = nums.size();
+        int currBest = min(len-1, nums[0]);
+        int jump = 0;
+        
+        
+        for(int i = 1; i < len; i++){
+            int nextBest = currBest;
+            
+            for(int j = i; j <= currBest; j++){
+                nextBest = max(nextBest, j + nums[j]);
+            }
+            
+            i = currBest;
+            currBest = min(nextBest, len-1);
+            jump++;
+        }
+        
+        return jump;
+    }
+};
